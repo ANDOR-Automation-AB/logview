@@ -5,6 +5,12 @@ Web-based SQLite log viewer.
 
 ### Install & Update
 
+Install from a `.tgz` package file:
+```
+sudo npm install -g logview-2.0.9.tgz
+```
+
+Or install directly from GitHub:
 ```
 sudo npm install -g ANDOR-Automation-AB/logview
 ```
