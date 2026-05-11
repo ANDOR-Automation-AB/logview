@@ -1,6 +1,6 @@
 {
   "name": "logview",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Web-based SQLite log viewer for Raspberry Pi",
   "main": "server.js",
   "bin": {
