@@ -1,7 +1,7 @@
 # logview
 
 Web-based SQLite log viewer.  
-**Requires**: Node version 22 or later.
+**Requires**: Node.js 22.12 or later.
 
 ### Install & Update
 
