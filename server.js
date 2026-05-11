@@ -39,9 +39,12 @@ function resolveDb(dbStr) {
   return path.isAbsolute(dbStr) ? dbStr : path.join(__dirname, dbStr);
 }
 
+const dbCache = new Map();
+
 function openDb(dbPath) {
   if (!dbPath || !fs.existsSync(dbPath)) throw new Error(`Database not found: ${dbPath}`);
-  return openDb(dbPath);
+  if (!dbCache.has(dbPath)) dbCache.set(dbPath, new DatabaseSync(dbPath));
+  return dbCache.get(dbPath);
 }
 
 function json(res, data, status = 200) {
