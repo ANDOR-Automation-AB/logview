@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inställningar – Bevattningslogg</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { overflow-y: auto; }
+    main { padding: 24px; }
+
+    section {
+      background: #ede8dc;
+      border: 1px solid #c8c2b6;
+      border-radius: 3px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    h2 {
+      font-size: 11px;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 12px;
+    }
+    .db-row { display: flex; gap: 16px; align-items: flex-start; }
+    .db-field { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+    .db-field--narrow { flex: 0 0 160px; }
+    .db-field label { font-size: 11px; font-weight: 600; color: #666; }
+    .field-error { font-size: 12px; color: #e74c3c; }
+
+    input[type=text], select {
+      font-size: 13px;
+      padding: 4px 8px;
+      border: 1px solid #c8c2b6;
+      background: #f5f0e8;
+      border-radius: 3px;
+      color: #2c2c2c;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    table.rows-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    table.rows-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: #666;
+      padding: 4px 6px;
+      border-bottom: 1px solid #c8c2b6;
+    }
+    table.rows-table td { padding: 3px 4px; }
+    table.rows-table td input[type=text] { padding: 3px 6px; }
+    table.rows-table td select { padding: 3px 4px; }
+    #rows-body tr:nth-child(even) { background: #e8e2d6; }
+    #rows-body tr:hover { background: #d4cfc5; }
+
+    .btn-del {
+      display: block;
+      margin-left: auto;
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      font-size: 13px;
+      background: rgba(231, 76, 60, 0.55);
+      border: 1px solid rgba(192, 57, 43, 0.4);
+      border-radius: 3px;
+      cursor: pointer;
+      color: #fff;
+    }
+    .btn-del:hover {
+      background: #e74c3c;
+      border-color: #c0392b;
+    }
+
+    .band-value {
+      width: 38px; padding: 3px 4px; font-size: 13px; text-align: center;
+      border: 1px solid #c8c2b6; background: #f5f0e8; border-radius: 3px; color: #2c2c2c;
+    }
+    #btn-add-band-col {
+      cursor: pointer; color: #888; text-align: center;
+      border-left: 1px solid #c8c2b6; border-right: 1px solid #c8c2b6;
+    }
+    #btn-add-band-col:hover { background: #d4cfc5; color: #2c2c2c; }
+    .band-col-remove {
+      width: 18px; height: 18px; padding: 0; font-size: 11px; line-height: 1;
+      background: rgba(231,76,60,0.7); border: none; border-radius: 2px; cursor: pointer;
+      color: #fff; float: right;
+    }
+    .band-col-remove:hover { background: #e74c3c; }
+    .th-val { width: 46px; }
+    .td-val { width: 46px; }
+    .th-band-text { width: 70px; }
+    .th-default-text { width: 80px; }
+    th[data-band-idx] { border-bottom: none; border-left: 1px solid #c8c2b6; }
+    .th-band-start { border-left: 1px solid #c8c2b6; }
+    #header-linje { border-bottom: none; }
+    #header-top th:first-child { vertical-align: top; }
+    .col-gap { width: 10px; padding: 0; border: none; }
+
+    tfoot td { padding-top: 6px; }
+    #btn-add {
+      width: 100%;
+      padding: 6px 0;
+      font-size: 14px;
+      background: #f5f0e8;
+      border: 1px dashed #c8c2b6;
+      border-radius: 3px;
+      cursor: pointer;
+      color: #888;
+      text-align: center;
+    }
+    #btn-add:hover { background: #d4cfc5; color: #2c2c2c; border-style: solid; }
+
+    /* Color palette picker */
+    .color-picker { position: relative; display: inline-block; }
+    .color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 3px;
+      border: 2px solid #c8c2b6;
+      cursor: pointer;
+      display: block;
+    }
+    .color-swatch:hover { border-color: #666; }
+    .color-popup {
+      position: absolute;
+      top: 28px;
+      left: 0;
+      background: #f5f0e8;
+      border: 1px solid #c8c2b6;
+      border-radius: 3px;
+      padding: 4px;
+      display: none;
+      grid-template-columns: repeat(5, 20px);
+      gap: 3px;
+      z-index: 200;
+    }
+    .color-popup.open { display: grid; }
+    .color-dot {
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      box-sizing: border-box;
+    }
+    .color-dot:hover { border-color: #555; }
+    .color-dot.selected { border-color: #000; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="btn-group">
+      <button disabled>Reset</button>
+    </div>
+    <div class="btn-group">
+      <button disabled>Pan</button>
+      <button disabled>Zoom</button>
+    </div>
+    <div class="btn-group">
+      <button disabled>+</button>
+      <button disabled>−</button>
+    </div>
+    <a href="/" class="active" style="margin-left:auto">Inställningar</a>
+  </header>
+  <main>
+    <section>
+      <h2>Databas</h2>
+      <div class="db-row">
+        <div class="db-field">
+          <label for="db-path">Sökväg</label>
+          <input type="text" id="db-path" placeholder="/home/pi/data.db">
+          <div class="field-error" id="db-error"></div>
+        </div>
+        <div class="db-field">
+          <label for="table">Tabell</label>
+          <input type="text" id="table" placeholder="tabellnamn">
+          <div class="field-error" id="table-error"></div>
+        </div>
+        <div class="db-field db-field--narrow">
+          <label for="time-col">Tidskolumn</label>
+          <select id="time-col"><option value="">— välj —</option></select>
+          <div class="field-error" id="time-col-error"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Rader</h2>
+      <table class="rows-table">
+        <thead>
+          <tr id="header-top">
+            <th rowspan="2" style="width:160px">Namn</th>
+            <th rowspan="2" class="col-gap"></th>
+            <th rowspan="2" class="th-default-text"></th>
+            <th rowspan="2" id="btn-add-band-col">+</th>
+            <th rowspan="2" class="col-gap"></th>
+            <th colspan="2" id="header-linje">Linje</th>
+            <th rowspan="2" class="col-gap"></th>
+            <th rowspan="2" style="width:34px"></th>
+          </tr>
+          <tr id="header-sub">
+            <th class="th-linje-start">Kolumn</th>
+            <th class="th-val">Färg</th>
+          </tr>
+        </thead>
+        <tbody id="rows-body"></tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5"><button id="btn-add">+</button></td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+  </main>
+  <script src="settings.js"></script>
+</body>
+</html>

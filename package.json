@@ -1,0 +1,19 @@
+{
+  "name": "logview",
+  "version": "2.0.0",
+  "description": "Web-based SQLite log viewer for Raspberry Pi",
+  "main": "server.js",
+  "bin": {
+    "logview": "./server.js"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ANDOR-Automation-AB/logview.git"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

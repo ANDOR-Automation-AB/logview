@@ -1,0 +1,262 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  background: #f5f0e8;
+  color: #2c2c2c;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
+  height: 36px;
+  background: #ede8dc;
+  border-bottom: 1px solid #c8c2b6;
+  gap: 8px;
+}
+
+.btn-group {
+  display: flex;
+  align-items: stretch;
+}
+
+header button {
+  padding: 0 14px;
+  background: none;
+  border-top: none;
+  border-bottom: none;
+  border-left: 1px solid #c8c2b6;
+  border-right: 1px solid #c8c2b6;
+  cursor: pointer;
+  color: #2c2c2c;
+  font-size: 13px;
+}
+
+.btn-group button + button {
+  margin-left: -1px;
+}
+
+header button:hover {
+  background: #d4cfc5;
+}
+
+header button.active {
+  background: #c8c2b6;
+}
+
+#bands {
+  flex: 0 0 auto;
+}
+
+#chart {
+  flex: 1;
+  min-height: 300px;
+}
+
+header .btn-group:first-child > button:first-child {
+  border-left: none;
+}
+
+header a {
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: #2c2c2c;
+  font-size: 13px;
+  border-left: 1px solid #c8c2b6;
+  border-right: none;
+}
+
+header a:hover {
+  background: #d4cfc5;
+}
+
+header a.active {
+  background: #c8c2b6;
+}
+
+header button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+header button:disabled:hover {
+  background: none;
+}
+
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-left: 1px solid #c8c2b6;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.date-range input[type="date"] {
+  border: 1px solid #c8c2b6;
+  background: #f5f0e8;
+  border-radius: 2px;
+  font-size: 13px;
+  color: #2c2c2c;
+  cursor: pointer;
+  outline: none;
+  padding: 1px 4px;
+  height: 22px;
+}
+
+.date-range input::-webkit-calendar-picker-indicator {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.dr-label {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+}
+
+.date-range input[type="text"] {
+  font-family: monospace;
+  border: 1px solid #c8c2b6;
+  background: #f5f0e8;
+  border-radius: 2px;
+  font-size: 13px;
+  color: #2c2c2c;
+  outline: none;
+  padding: 1px 4px;
+  height: 22px;
+  width: 52px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.date-range input[type="text"]:hover {
+  background: #d4cfc5;
+}
+
+.date-range input[type="text"]:focus {
+  background: #c8c2b6;
+  cursor: text;
+}
+
+.date-range input.hint-out {
+  color: #aaa;
+}
+
+.hour-picker {
+  position: relative;
+}
+
+.hp-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  min-width: 100%;
+  background: #f5f0e8;
+  border: 1px solid #c8c2b6;
+  border-radius: 2px;
+  z-index: 100;
+}
+
+.hp-dropdown.open { display: block; }
+
+.hp-item {
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #2c2c2c;
+}
+
+.hp-item:hover { background: #d4cfc5; }
+
+.hp-item.hint-out { color: #bbb; }
+
+.dr-group {
+  display: flex;
+  align-items: center;
+}
+
+.dr-group > * + * {
+  margin-left: -1px;
+}
+
+.dr-btn {
+  border: 1px solid #c8c2b6;
+  background: #f5f0e8;
+  border-radius: 2px;
+  height: 22px;
+  padding: 0 5px;
+  cursor: pointer;
+  font-size: 13px;
+  color: #2c2c2c;
+  line-height: 1;
+}
+
+.dr-btn:hover {
+  background: #d4cfc5;
+}
+
+.dr-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.dr-btn:disabled:hover {
+  background: #f5f0e8;
+}
+
+.auto-countdown {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.auto-countdown.hidden { display: none; }
+
+.auto-countdown-box {
+  background: #f5f0e8;
+  border: 2px solid #c8c2b6;
+  border-radius: 4px;
+  padding: 32px 40px;
+  text-align: center;
+  box-shadow: 0 6px 32px rgba(0, 0, 0, 0.35);
+  min-width: 320px;
+}
+
+.auto-countdown-title {
+  font-size: 20px;
+  color: #2c2c2c;
+}
+
+#auto-countdown-secs {
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c2c2c;
+}
+
+.auto-countdown-hint {
+  font-size: 13px;
+  color: #666;
+  margin-top: 10px;
+}
+
