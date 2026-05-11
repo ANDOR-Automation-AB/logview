@@ -6,7 +6,10 @@ const os = require('node:os');
 const { DatabaseSync } = require('node:sqlite');
 
 const PORT = 3000;
-const SETTINGS_DIR = path.join(os.homedir(), '.config', 'logview');
+const homeDir = process.env.SUDO_USER
+  ? path.join('/home', process.env.SUDO_USER)
+  : os.homedir();
+const SETTINGS_DIR = path.join(homeDir, '.config', 'logview');
 const SETTINGS_PATH = path.join(SETTINGS_DIR, 'settings.json');
 
 const mime = {
