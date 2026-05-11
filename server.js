@@ -33,6 +33,12 @@ if (!fs.existsSync(SETTINGS_DIR)) fs.mkdirSync(SETTINGS_DIR, { recursive: true }
 if (!fs.existsSync(SETTINGS_PATH)) {
   fs.writeFileSync(SETTINGS_PATH, JSON.stringify(DEFAULT_SETTINGS, null, 2));
 }
+if (process.env.SUDO_UID) {
+  const uid = parseInt(process.env.SUDO_UID);
+  const gid = parseInt(process.env.SUDO_GID);
+  fs.chownSync(SETTINGS_DIR, uid, gid);
+  fs.chownSync(SETTINGS_PATH, uid, gid);
+}
 
 function resolveDb(dbStr) {
   if (!dbStr) return '';
