@@ -29,7 +29,13 @@ if (!fs.existsSync(SETTINGS_PATH)) {
 }
 
 function resolveDb(dbStr) {
+  if (!dbStr) return '';
   return path.isAbsolute(dbStr) ? dbStr : path.join(__dirname, dbStr);
+}
+
+function openDb(dbPath) {
+  if (!dbPath || !fs.existsSync(dbPath)) throw new Error(`Database not found: ${dbPath}`);
+  return openDb(dbPath);
 }
 
 function json(res, data, status = 200) {
@@ -45,7 +51,7 @@ http.createServer((req, res) => {
     const s = loadSettings();
     if (!s.table || !s.timeColumn) { json(res, []); return; }
     try {
-      const db = new DatabaseSync(resolveDb(s.db));
+      const db = openDb(resolveDb(s.db));
       const rows = db.prepare(`SELECT * FROM "${s.table}" ORDER BY "${s.timeColumn}"`).all();
       const tc = s.timeColumn;
       rows.forEach(r => { if (typeof r[tc] === 'string') r[tc] = r[tc].slice(0, 16); });
@@ -82,7 +88,7 @@ http.createServer((req, res) => {
       const s = loadSettings();
       const dbParam = urlObj.searchParams.get('db');
       const dbPath = dbParam ? resolveDb(dbParam) : resolveDb(s.db);
-      const db = new DatabaseSync(dbPath);
+      const db = openDb(dbPath);
       const tables = db.prepare("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name").all();
       json(res, tables.map(t => t.name));
     } catch (e) {
@@ -102,7 +108,7 @@ http.createServer((req, res) => {
     try {
       const s = loadSettings();
       const dbPath = dbParam ? resolveDb(dbParam) : resolveDb(s.db);
-      const db = new DatabaseSync(dbPath);
+      const db = openDb(dbPath);
       const row = db.prepare(`SELECT "${column}" as val FROM "${table}" WHERE "${column}" IS NOT NULL LIMIT 1`).get();
       json(res, { value: row ? row.val : null });
     } catch (e) {
@@ -121,7 +127,7 @@ http.createServer((req, res) => {
     try {
       const s = loadSettings();
       const dbPath = dbParam ? resolveDb(dbParam) : resolveDb(s.db);
-      const db = new DatabaseSync(dbPath);
+      const db = openDb(dbPath);
       const cols = db.prepare(`PRAGMA table_info("${table}")`).all();
       json(res, cols.map(c => c.name));
     } catch (e) {
