@@ -2,10 +2,12 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const os = require('node:os');
 const { DatabaseSync } = require('node:sqlite');
 
 const PORT = 3000;
-const SETTINGS_PATH = path.join(__dirname, 'settings.json');
+const SETTINGS_DIR = path.join(os.homedir(), '.config', 'logview');
+const SETTINGS_PATH = path.join(SETTINGS_DIR, 'settings.json');
 
 const mime = {
   '.html': 'text/html',
@@ -24,6 +26,7 @@ function loadSettings() {
   }
 }
 
+if (!fs.existsSync(SETTINGS_DIR)) fs.mkdirSync(SETTINGS_DIR, { recursive: true });
 if (!fs.existsSync(SETTINGS_PATH)) {
   fs.writeFileSync(SETTINGS_PATH, JSON.stringify(DEFAULT_SETTINGS, null, 2));
 }
