@@ -44,11 +44,15 @@ http.createServer((req, res) => {
   if (pathname === '/data' && req.method === 'GET') {
     const s = loadSettings();
     if (!s.table || !s.timeColumn) { json(res, []); return; }
-    const db = new DatabaseSync(resolveDb(s.db));
-    const rows = db.prepare(`SELECT * FROM "${s.table}" ORDER BY "${s.timeColumn}"`).all();
-    const tc = s.timeColumn;
-    rows.forEach(r => { if (typeof r[tc] === 'string') r[tc] = r[tc].slice(0, 16); });
-    json(res, rows);
+    try {
+      const db = new DatabaseSync(resolveDb(s.db));
+      const rows = db.prepare(`SELECT * FROM "${s.table}" ORDER BY "${s.timeColumn}"`).all();
+      const tc = s.timeColumn;
+      rows.forEach(r => { if (typeof r[tc] === 'string') r[tc] = r[tc].slice(0, 16); });
+      json(res, rows);
+    } catch (e) {
+      json(res, { error: e.message }, 500);
+    }
     return;
   }
 
