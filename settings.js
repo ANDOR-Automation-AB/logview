@@ -392,13 +392,15 @@ async function autoSave() {
     rows,
   };
   try {
-    await fetch('/settings', {
+    const r = await fetch('/settings', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(settings),
     });
+    const data = await r.json();
+    if (data.error) document.getElementById('db-error').textContent = `Kunde inte spara: ${data.error}`;
   } catch (e) {
-    console.error('Fel vid sparning:', e);
+    document.getElementById('db-error').textContent = 'Kunde inte spara inställningar';
   }
 }
 
