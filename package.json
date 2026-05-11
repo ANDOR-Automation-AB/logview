@@ -7,8 +7,7 @@
     "logview": "./server.js"
   },
   "scripts": {
-    "start": "node server.js",
-    "postinstall": "node postinstall.js"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
