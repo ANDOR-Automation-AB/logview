@@ -21,8 +21,7 @@ sudo npm uninstall -g logview
 
 ### Settings
 
-Settings are stored in `/usr/lib/node_modules/logview/settings.json`.  
-Settings are created automatically on first start and saved automatically.
+Settings are stored in `~/.config/logview/settings.json` and created automatically on first start and saved automatically.
 
 Configure settings by opening `http://<ip>:3000/settings` in a browser.
 
